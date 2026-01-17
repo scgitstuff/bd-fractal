@@ -18,28 +18,35 @@ pass line into recursive function
     stop when len < 5
 it should be like a pinwheel of christmas trees
 
-
-
 """
 
 
 def doStuff(win: Window, origin: Line):
 
     win.drawLine(origin)
-    print(f"Origin: {origin}")
+    # print(f"Origin: {origin}")
 
     if origin.length < 6:
         return
 
-    # I want to work with degrees, because radians suck
+    # I want to work with degrees
     angle = 45
 
-    # shorter line for branches
+    # split line into X parts
+    # each part having branches decreasing in length
+
+    branchCount = 5
+    branchStart = origin.length // branchCount
+
+    # i = 0
+    # line: Line = origin
+    # while i < branchCount:
+
+    # branches are a fraction of the length of the starting line
     branchlen = origin.length // 3
-    # start branches away from origin
-    branchStart = origin.length // 10
 
     branchStartPoint = getEndPoint(origin.start, origin.angle, branchStart)
+
     rightLine = Line(
         branchStartPoint,
         getEndPoint(branchStartPoint, origin.angle - angle, branchlen),
@@ -49,11 +56,14 @@ def doStuff(win: Window, origin: Line):
         getEndPoint(branchStartPoint, origin.angle + angle, branchlen),
     )
 
-    print(f"Right: {rightLine}")
+    # line = Line(branchStartPoint, origin.end)
+    # i += 1
+
+    # print(f"Right: {rightLine}")
     win.drawLine(rightLine)
     # doStuff(win, rightLine)
 
-    print(f"Left: {leftLine}")
+    # print(f"Left: {leftLine}")
     win.drawLine(leftLine)
     # doStuff(win, leftLine)
 

@@ -17,7 +17,6 @@ boot.dev "First Personal Project"
 
 # TODO
 
-
 # Dependencies
 
 - `tkinter`

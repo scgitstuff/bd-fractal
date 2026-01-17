@@ -1,5 +1,5 @@
 from window import Window
-from line import Line, lineAngle
+from line import Line, lineAngleCircle, getEndPoint
 from point import Point
 
 
@@ -19,15 +19,15 @@ def testPoint():
 
 def testLine():
 
-    print(lineAngle(10, 0))
-    print(lineAngle(10, 10))
-    print(lineAngle(0, 10))
-    print(lineAngle(-10, 10))
-    print(lineAngle(-10, 0))
+    print(lineAngleCircle(10, 0))
+    print(lineAngleCircle(10, 10))
+    print(lineAngleCircle(0, 10))
+    print(lineAngleCircle(-10, 10))
+    print(lineAngleCircle(-10, 0))
 
-    print(lineAngle(-10, -10))
-    print(lineAngle(0, -10))
-    print(lineAngle(10, -10))
+    print(lineAngleCircle(-10, -10))
+    print(lineAngleCircle(0, -10))
+    print(lineAngleCircle(10, -10))
 
     line = Line(Point(10, 10), Point(200, 200))
     print(line)
@@ -42,21 +42,20 @@ def testLine():
 
 def testWindow():
     win = Window(500, 500, "testWindow")
-    # lines = List[Line]
+    start = Point(0, 0)
 
-    # for this to work, have to use lineAngleCircle() in Line constructor
-    # for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
-    #     line = getLineFromAngle(Point(0, 0), angle, 200)
-    #     win.drawLine(line, "blue")
+    for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
+        line = Line(start, getEndPoint(start, angle, 200))
+        win.drawLine(line, "black")
 
-    line = Line(Point(10, 10), Point(200, 200))
+    line = Line(Point(50, 50), Point(100, 100))
     win.drawLine(line, "blue")
-    line = Line(Point(10, -10), Point(200, -200))
+    line = Line(Point(50, -50), Point(100, -100))
     win.drawLine(line, "red")
 
-    line = Line(Point(-10, 10), Point(-200, 200))
+    line = Line(Point(-50, 50), Point(-100, 100))
     win.drawLine(line, "blue")
-    line = Line(Point(-10, -10), Point(-200, -200))
+    line = Line(Point(-50, -50), Point(-100, -100))
     win.drawLine(line, "red")
 
     win.wait()

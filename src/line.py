@@ -2,13 +2,9 @@ from point import Point
 import math
 import numpy
 
-
 """
-for this code Line is the hypotenuse of a right triangle
-on a coordinate plane over the canvas
-I started with 2 Points, as I get further I need more info
-I'm having a problem drawing branches, the angle calculations 
-are still off
+at first I'm using Line as if it were immutable
+any time I need to re-size a line, just make a new one with getEndPoint()
 """
 
 
@@ -22,10 +18,8 @@ class Line:
 
         self.start = start
         self.end = end
-        self.base = end.x - start.x
-        self.opp = end.y - start.y
-        self.length = _hypotenuse(self.base, self.opp)
-        self.angle = lineAngle(self.base, self.opp)
+        self.length = _hypotenuse(end.x - start.x, end.y - start.y)
+        self.angle = lineAngleCircle(end.x - start.x, end.y - start.y)
 
     def __str__(self) -> str:
         return (
@@ -34,6 +28,13 @@ class Line:
 
 
 def getEndPoint(start: Point, angle: int, length: int) -> Point:
+    """
+    this is effectively another constructor, because Python blows
+
+    I'm not returning a line because the initial use was to find a
+    point at given length along an existing line
+    """
+
     # x calculation
     x = length * math.cos(math.radians(angle))
     # offset from wherever the line started
@@ -57,23 +58,25 @@ def _hypotenuse(base: int, opp: int) -> int:
     return h
 
 
-def lineAngle(base: int, opp: int) -> int:
-    """ """
-    # divide by 0 and undefined tan
-    if base == 0:
-        if opp > 0:
-            return 90
-        if opp < 0:
-            return -90
+# def _lineAngle(base: int, opp: int) -> int:
+#     """ """
+#     # divide by 0 and undefined tan
+#     if base == 0:
+#         if opp > 0:
+#             return 90
+#         if opp < 0:
+#             return -90
 
-    x = theta(base, opp)
+#     x = _theta(base, opp)
 
-    return x
+#     return x
 
 
 def lineAngleCircle(base: int, opp: int) -> int:
     """
     translate angle to 360
+    this is the only way I could get my head around it
+    it makes the angle calculation for branches simple
     """
     # divide by 0 and undefined tan
     if base == 0:
@@ -87,7 +90,7 @@ def lineAngleCircle(base: int, opp: int) -> int:
         if base < 0:
             return 180
 
-    x = theta(base, opp)
+    x = _theta(base, opp)
 
     # Q1
     if base > 0 and opp > 0:
@@ -109,7 +112,7 @@ def lineAngleCircle(base: int, opp: int) -> int:
     return x
 
 
-def theta(base: int, opp: int):
+def _theta(base: int, opp: int):
     x = numpy.arctan(opp / base)
     x = math.degrees(x)
     x = round(x)
