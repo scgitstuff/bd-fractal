@@ -10,11 +10,10 @@ any time I need to re-size a line, just make a new one with getEndPoint()
 
 class Line:
     def __init__(self, start: Point, end: Point):
-        isRetard = start.x == 0 and start.y == 0 and end.x == 0 and end.y == 0
-        # TODO: this assert alway executes.  Why?
-        # assert isRetard, "fuck off with your zeros"
-        if isRetard:
+        if start.x == 0 and start.y == 0 and end.x == 0 and end.y == 0:
             raise AssertionError("fuck off with your zeros")
+        if start.x == end.x and start.y == end.y:
+            raise AssertionError("a Line cannot be a single Point")
 
         self.start = start
         self.end = end
@@ -72,6 +71,7 @@ def _hypotenuse(base: int, opp: int) -> int:
 #     return x
 
 
+# I want to work with degrees not radians
 def lineAngleCircle(base: int, opp: int) -> int:
     """
     translate angle to 360
@@ -113,6 +113,9 @@ def lineAngleCircle(base: int, opp: int) -> int:
 
 
 def _theta(base: int, opp: int):
+    if base == 0:
+        raise AssertionError("stop passing bad stuff")
+
     x = numpy.arctan(opp / base)
     x = math.degrees(x)
     x = round(x)

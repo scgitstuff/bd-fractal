@@ -30,3 +30,8 @@ uv run src/test.py
 ```
 
 # Notes
+
+## `first.py`
+
+- it does what I wanted
+- it looks like a pinwheel of christmas trees

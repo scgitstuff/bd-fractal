@@ -4,24 +4,46 @@ from line import Line, getEndPoint
 
 
 """
-find a point on the line to start branches
-use existing angle +- 45 for branches
-have to add calculated end point to branch start point to get absolute point
-
-cos(x) = b / h
-
-
-pass line into recursive function
-    move 5, make that next origin
-    call left & right with half length
-    45 degree angle
-    stop when len < 5
 it should be like a pinwheel of christmas trees
+
 
 """
 
 
-def doStuff(win: Window, origin: Line):
+def doStuff(win: Window, start: Point, length: int):
+
+    endPoints: list[Point] = []
+
+    # Q1
+    endPoints.append(getEndPoint(start, 0, length))
+    endPoints.append(getEndPoint(start, 30, length))
+    endPoints.append(getEndPoint(start, 60, length))
+    # endPoints.append(getEndPoint(start, 45, length))
+    endPoints.append(getEndPoint(start, 90, length))
+
+    # Q2
+    endPoints.append(getEndPoint(start, 120, length))
+    endPoints.append(getEndPoint(start, 150, length))
+    # endPoints.append(getEndPoint(start, 135, length))
+    endPoints.append(getEndPoint(start, 180, length))
+
+    # Q3
+    endPoints.append(getEndPoint(start, 210, length))
+    endPoints.append(getEndPoint(start, 240, length))
+    # endPoints.append(getEndPoint(start, 225, length))
+    endPoints.append(getEndPoint(start, 270, length))
+
+    # Q4
+    endPoints.append(getEndPoint(start, 300, length))
+    endPoints.append(getEndPoint(start, 330, length))
+    # endPoints.append(getEndPoint(start, 315, length))
+
+    for end in endPoints:
+        line = Line(start, end)
+        drawBranches(win, line)
+
+
+def drawBranches(win: Window, origin: Line):
 
     win.drawLine(origin)
     # print(f"Origin: {origin}")
@@ -29,52 +51,43 @@ def doStuff(win: Window, origin: Line):
     if origin.length < 6:
         return
 
-    # I want to work with degrees
     angle = 45
+    branchCount = 8
+    branchInterval = origin.length // branchCount
+    if branchInterval < 2:
+        return
 
-    # split line into X parts
-    # each part having branches decreasing in length
+    i = 0
+    line = origin
+    while True:
 
-    branchCount = 5
-    branchStart = origin.length // branchCount
+        branchlen = line.length // 3
+        # have to be at least 2
+        # otherwise you try to create a line that is 1 point, crash stuff
+        if branchlen < 2:
+            break
 
-    # i = 0
-    # line: Line = origin
-    # while i < branchCount:
+        branchStartPoint = getEndPoint(line.start, line.angle, branchInterval)
 
-    # branches are a fraction of the length of the starting line
-    branchlen = origin.length // 3
+        rightLine = Line(
+            branchStartPoint,
+            getEndPoint(branchStartPoint, line.angle - angle, branchlen),
+        )
+        leftLine = Line(
+            branchStartPoint,
+            getEndPoint(branchStartPoint, line.angle + angle, branchlen),
+        )
 
-    branchStartPoint = getEndPoint(origin.start, origin.angle, branchStart)
+        # print(f"Right: {rightLine}")
+        # win.drawLine(rightLine)
+        drawBranches(win, rightLine)
 
-    rightLine = Line(
-        branchStartPoint,
-        getEndPoint(branchStartPoint, origin.angle - angle, branchlen),
-    )
-    leftLine = Line(
-        branchStartPoint,
-        getEndPoint(branchStartPoint, origin.angle + angle, branchlen),
-    )
+        # print(f"Left: {leftLine}")
+        # win.drawLine(leftLine)
+        drawBranches(win, leftLine)
 
-    # line = Line(branchStartPoint, origin.end)
-    # i += 1
+        i += 1
+        if i >= branchCount:
+            break
 
-    # print(f"Right: {rightLine}")
-    win.drawLine(rightLine)
-    # doStuff(win, rightLine)
-
-    # print(f"Left: {leftLine}")
-    win.drawLine(leftLine)
-    # doStuff(win, leftLine)
-
-
-def getLine(origin: Point) -> Line:
-
-    p = Point(origin.x, origin.y)
-
-    return Line(origin, p)
-
-
-def getNext(parent: Line) -> tuple[int, int]:
-
-    return (0, 0)
+        line = Line(branchStartPoint, origin.end)

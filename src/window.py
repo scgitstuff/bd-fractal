@@ -14,6 +14,7 @@ class Window:
         self.root = Tk()
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close)
+        self.root.protocol("WM")
         # self.root.resizable(True, True)
 
         self.canvas = Canvas(
@@ -43,7 +44,7 @@ class Window:
             *self._offset(line.start).asTuple(),
             *self._offset(line.end).asTuple(),
             fill=fillColor,
-            width=3,
+            width=1,
         )
 
     def _offset(self, p: Point) -> Point:
