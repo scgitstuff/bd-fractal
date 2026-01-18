@@ -52,30 +52,44 @@ def drawBranches(win: Window, origin: Line):
         return
 
     angle = 45
+
+    # TODO: I want to get rid of this
+    # I want a branch every X points, decreasing size
     branchCount = 8
+
     branchInterval = origin.length // branchCount
-    if branchInterval < 2:
+    # branchInterval = 12
+
+    # this is important, at least 3, keep the branches spread enough
+    # when it was 2, there was some noise, I suspect a rounding error
+    if branchInterval < 3:
         return
 
     i = 0
     line = origin
-    while True:
+    while line.length >= branchInterval:
 
+        # the branch has to shrink, otherwise infinite recursion
         branchlen = line.length // 3
-        # have to be at least 2
-        # otherwise you try to create a line that is 1 point, crash stuff
-        if branchlen < 2:
+        # have to be at least 2; a little higher seems to filter out some noise
+        # otherwise you try to create a line that is 1 point
+        if branchlen < 3:
             break
 
+        # branchStartPoint = line.start
         branchStartPoint = getEndPoint(line.start, line.angle, branchInterval)
+
+        x = angle
+        # to invert direction
+        # x = 180 - angle
 
         rightLine = Line(
             branchStartPoint,
-            getEndPoint(branchStartPoint, line.angle - angle, branchlen),
+            getEndPoint(branchStartPoint, line.angle - x, branchlen),
         )
         leftLine = Line(
             branchStartPoint,
-            getEndPoint(branchStartPoint, line.angle + angle, branchlen),
+            getEndPoint(branchStartPoint, line.angle + x, branchlen),
         )
 
         # print(f"Right: {rightLine}")
@@ -90,4 +104,11 @@ def drawBranches(win: Window, origin: Line):
         if i >= branchCount:
             break
 
-        line = Line(branchStartPoint, origin.end)
+        # branchStartPoint = getEndPoint(line.start, line.angle, branchInterval)
+
+        # as I tweak variables, I sometimes end up exactly at the end of origin
+        # just means I'm done
+        try:
+            line = Line(branchStartPoint, origin.end)
+        except:
+            break

@@ -34,6 +34,8 @@ def getEndPoint(start: Point, angle: int, length: int) -> Point:
     point at given length along an existing line
     """
 
+    angle = angle % 360
+
     # x calculation
     x = length * math.cos(math.radians(angle))
     # offset from wherever the line started

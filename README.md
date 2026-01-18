@@ -35,3 +35,5 @@ uv run src/test.py
 
 - it does what I wanted
 - it looks like a pinwheel of christmas trees
+- something is still off, zoom in and I see noise, its not right
+- I think I need to remove recursion and only go 2 levels deep
