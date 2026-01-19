@@ -40,7 +40,7 @@ def doStuff():
 def _drawDynamicBranches(
     win: Window, origin: Line, recursionLevel: int, color: str = "white"
 ):
-    color = "blueviolet"
+    # color = "blueviolet"
     # color = _randomColor()
     # color = branchColor[level % len(branchColor)]
 
