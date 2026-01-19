@@ -5,7 +5,9 @@ from point import Point
 
 
 class Window:
-    def __init__(self, width: int, height: int, title: str = "Fractal"):
+    def __init__(
+        self, width: int, height: int, title: str = "Fractal", background: str = "white"
+    ):
         self.width = width
         self.height = height
 
@@ -14,14 +16,13 @@ class Window:
         self.root = Tk()
         self.root.title(title)
         self.root.protocol("WM_DELETE_WINDOW", self.close)
-        self.root.protocol("WM")
         # self.root.resizable(True, True)
 
         self.canvas = Canvas(
             self.root,
             width=self.width,
             height=self.height,
-            background="white",
+            background=background,
         )
         self.canvas.pack()
 
@@ -44,7 +45,7 @@ class Window:
             *self._offset(line.start).asTuple(),
             *self._offset(line.end).asTuple(),
             fill=fillColor,
-            width=1,
+            width=line.width,
         )
 
     def _offset(self, p: Point) -> Point:

@@ -48,14 +48,14 @@ def testWindow():
         line = Line(start, getEndPoint(start, angle, 200))
         win.drawLine(line, "black")
 
-    line = Line(Point(50, 50), Point(100, 100))
+    line = Line(Point(50, 50), Point(100, 100), 3)
     win.drawLine(line, "blue")
-    line = Line(Point(50, -50), Point(100, -100))
+    line = Line(Point(50, -50), Point(100, -100), 3)
     win.drawLine(line, "red")
 
-    line = Line(Point(-50, 50), Point(-100, 100))
+    line = Line(Point(-50, 50), Point(-100, 100), 3)
     win.drawLine(line, "blue")
-    line = Line(Point(-50, -50), Point(-100, -100))
+    line = Line(Point(-50, -50), Point(-100, -100), 3)
     win.drawLine(line, "red")
 
     win.wait()

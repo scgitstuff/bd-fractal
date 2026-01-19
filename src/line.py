@@ -3,20 +3,20 @@ import math
 import numpy
 
 """
-at first I'm using Line as if it were immutable
-any time I need to re-size a line, just make a new one with getEndPoint()
+I'm using Line as if it were immutable
+any time I need to re-size a line
+just make a new one with getEndPoint()
 """
 
 
 class Line:
-    def __init__(self, start: Point, end: Point):
-        if start.x == 0 and start.y == 0 and end.x == 0 and end.y == 0:
-            raise AssertionError("fuck off with your zeros")
+    def __init__(self, start: Point, end: Point, width: int = 1):
         if start.x == end.x and start.y == end.y:
             raise AssertionError("a Line cannot be a single Point")
 
         self.start = start
         self.end = end
+        self.width = width
         self.length = _hypotenuse(end.x - start.x, end.y - start.y)
         self.angle = lineAngleCircle(end.x - start.x, end.y - start.y)
 
@@ -28,11 +28,15 @@ class Line:
 
 def getEndPoint(start: Point, angle: int, length: int) -> Point:
     """
-    this is effectively another constructor, because Python blows
+    this is effectively another constructor
 
-    I'm not returning a line because the initial use was to find a
-    point at given length along an existing line
+    I'm not returning a line because the initial use was to find
+    the point at given length along an existing line
     """
+
+    # special case needed for branches
+    if length <= 0:
+        return start
 
     angle = angle % 360
 
@@ -49,7 +53,7 @@ def getEndPoint(start: Point, angle: int, length: int) -> Point:
     return end
 
 
-# I could use __len__ instead
+# I could use __len__
 # but I hate any kind of operator overload functions
 # because they hide code, I prefer explicit
 def _hypotenuse(base: int, opp: int) -> int:
@@ -59,20 +63,6 @@ def _hypotenuse(base: int, opp: int) -> int:
     return h
 
 
-# def _lineAngle(base: int, opp: int) -> int:
-#     """ """
-#     # divide by 0 and undefined tan
-#     if base == 0:
-#         if opp > 0:
-#             return 90
-#         if opp < 0:
-#             return -90
-
-#     x = _theta(base, opp)
-
-#     return x
-
-
 # I want to work with degrees not radians
 def lineAngleCircle(base: int, opp: int) -> int:
     """
@@ -80,12 +70,16 @@ def lineAngleCircle(base: int, opp: int) -> int:
     this is the only way I could get my head around it
     it makes the angle calculation for branches simple
     """
-    # divide by 0 and undefined tan
+    if base == 0 and opp == 0:
+        raise AssertionError("no angle possible")
+
+    # divide by 0
     if base == 0:
         if opp > 0:
             return 90
         if opp < 0:
             return 270
+    # undefined tan
     if opp == 0:
         if base > 0:
             return 0
