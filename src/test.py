@@ -1,6 +1,7 @@
 from window import Window
-from line import Line, lineAngleCircle, getEndPoint
+from line import Line
 from point import Point
+import trig
 
 
 def main():
@@ -19,15 +20,15 @@ def testPoint():
 
 def testLine():
 
-    print(lineAngleCircle(10, 0))
-    print(lineAngleCircle(10, 10))
-    print(lineAngleCircle(0, 10))
-    print(lineAngleCircle(-10, 10))
-    print(lineAngleCircle(-10, 0))
+    print(trig.lineAngleCircle(10, 0))
+    print(trig.lineAngleCircle(10, 10))
+    print(trig.lineAngleCircle(0, 10))
+    print(trig.lineAngleCircle(-10, 10))
+    print(trig.lineAngleCircle(-10, 0))
 
-    print(lineAngleCircle(-10, -10))
-    print(lineAngleCircle(0, -10))
-    print(lineAngleCircle(10, -10))
+    print(trig.lineAngleCircle(-10, -10))
+    print(trig.lineAngleCircle(0, -10))
+    print(trig.lineAngleCircle(10, -10))
 
     line = Line(Point(10, 10), Point(200, 200))
     print(line)
@@ -45,7 +46,7 @@ def testWindow():
     start = Point(0, 0)
 
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
-        line = Line(start, getEndPoint(start, angle, 200))
+        line = Line(start, trig.getEndPoint(start, angle, 200))
         win.drawLine(line, "black")
 
     line = Line(Point(50, 50), Point(100, 100), 3)

@@ -11,8 +11,14 @@ boot.dev "First Personal Project"
 # Initial plan
 
 - use `tkinter` and draw interactively, not making images
-- first idea is just a recursive line algorithm, like pine needles, just to get my bearings
+- first idea is just a recursive line algorithm, like pine needles
 - then the famous ones from https://mathworld.wolfram.com/Fractal.html, may switch to https://matplotlib.org/ for this part
+
+# Update plan
+
+- I think I'm already doing more than project scope and I'm not finished
+- so I won't get to any of the other fractals for this submission
+- I'm sure I will add them later, because I'm having fun with it
 
 # TODO
 

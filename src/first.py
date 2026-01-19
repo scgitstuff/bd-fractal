@@ -1,6 +1,7 @@
 from window import Window
 from point import Point
-from line import Line, getEndPoint
+from line import Line
+import trig
 import time
 import random
 
@@ -17,6 +18,7 @@ def doStuff():
     win = Window(800, 800, "Hello from bd-fractal!", "black")
     length = (win.height // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
+    # I want to limit this to 15-90 in 15 degree increments
     spokeAngle = 30
     endPoints: list[Point] = _getEndPoints(start, spokeAngle, length)
 
@@ -34,23 +36,29 @@ def doStuff():
     win.wait()
 
 
+# TODO: I want to make these variables a params struct passed in by UI
 def _drawDynamicBranches(
-    win: Window, origin: Line, level: int = 0, color: str = "white"
+    win: Window, origin: Line, recursionLevel: int, color: str = "white"
 ):
-    # color = "blueviolet"
+    color = "blueviolet"
     # color = _randomColor()
     # color = branchColor[level % len(branchColor)]
-    level += 1
+
+    recursionLimit = 10
+    if recursionLevel > recursionLimit:
+        return
+    recursionLevel += 1
 
     win.drawLine(origin, color)
 
-    # TODO: I want to make these variables a params struct passed in by UI
+    # planning to limit this to 0-90 in 5 degree increments
     branchAngle = 30
 
-    # density - number of branches per line
+    # number of branches per line
     branchCount = 6
     # density - space between branches
-    branchInterval = origin.length // branchCount
+    originLength = round(origin.length)
+    branchInterval = originLength // branchCount
     # limit branch density, have to have space between branches, or it looks like shit
     minBranchSpace = 3
     # override for fixed version that I like less
@@ -69,8 +77,7 @@ def _drawDynamicBranches(
     if branchInterval < minBranchSpace:
         return
 
-    lineLength = origin.length
-
+    lineLength = originLength
     while lineLength >= branchInterval:
 
         branchlen = lineLength // 3
@@ -79,10 +86,10 @@ def _drawDynamicBranches(
             break
 
         lineConsumed = branchInterval * intervalMultiplier
-        lineLength = origin.length - lineConsumed
+        lineLength = originLength - lineConsumed
         intervalMultiplier += 1
 
-        branchStartPoint = getEndPoint(origin.start, origin.angle, lineConsumed)
+        branchStartPoint = trig.getEndPoint(origin.start, origin.angle, lineConsumed)
 
         x = branchAngle
         if doInvert:
@@ -90,15 +97,15 @@ def _drawDynamicBranches(
 
         rightLine = Line(
             branchStartPoint,
-            getEndPoint(branchStartPoint, origin.angle - x, branchlen),
+            trig.getEndPoint(branchStartPoint, origin.angle - x, branchlen),
         )
         leftLine = Line(
             branchStartPoint,
-            getEndPoint(branchStartPoint, origin.angle + x, branchlen),
+            trig.getEndPoint(branchStartPoint, origin.angle + x, branchlen),
         )
 
-        _drawDynamicBranches(win, rightLine, level, color)
-        _drawDynamicBranches(win, leftLine, level, color)
+        _drawDynamicBranches(win, rightLine, recursionLevel, color)
+        _drawDynamicBranches(win, leftLine, recursionLevel, color)
 
 
 def _randomColor() -> str:
@@ -122,6 +129,6 @@ def _getEndPoints(start: Point, angle: int, length: int) -> list[Point]:
     count = 360 // angle
 
     for i in range(count):
-        endPoints.append(getEndPoint(start, i * angle, length))
+        endPoints.append(trig.getEndPoint(start, i * angle, length))
 
     return endPoints
