@@ -20,15 +20,15 @@ def testPoint():
 
 def testLine():
 
-    print(trig.lineAngleCircle(10, 0))
-    print(trig.lineAngleCircle(10, 10))
-    print(trig.lineAngleCircle(0, 10))
-    print(trig.lineAngleCircle(-10, 10))
-    print(trig.lineAngleCircle(-10, 0))
+    print(trig.calcAngle360(10, 0))
+    print(trig.calcAngle360(10, 10))
+    print(trig.calcAngle360(0, 10))
+    print(trig.calcAngle360(-10, 10))
+    print(trig.calcAngle360(-10, 0))
 
-    print(trig.lineAngleCircle(-10, -10))
-    print(trig.lineAngleCircle(0, -10))
-    print(trig.lineAngleCircle(10, -10))
+    print(trig.calcAngle360(-10, -10))
+    print(trig.calcAngle360(0, -10))
+    print(trig.calcAngle360(10, -10))
 
     line = Line(Point(10, 10), Point(200, 200))
     print(line)

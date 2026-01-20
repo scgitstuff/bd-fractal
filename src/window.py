@@ -24,6 +24,9 @@ class Window:
             height=self.height,
             background=background,
         )
+        # TODO: bad old way
+        # working on newer, correct, tkinter code
+        # will rewrite when I'm done tutorial
         self.canvas.pack()
 
         self.isRunning = False

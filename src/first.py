@@ -1,11 +1,12 @@
 from window import Window
 from point import Point
 from line import Line
+from settings import Params, getParams
 import trig
 import time
 import random
 
-branchColor = [
+_branchColor = [
     "white",
     "red",
     "green",
@@ -13,69 +14,58 @@ branchColor = [
 ]
 
 
+# TODO: the UI should have all the settings as radio/check and spin
+# with buttons to launch a separate window for the image and save
 def doStuff():
     # print("Hello from bd-fractal!")
-    win = Window(800, 800, "Hello from bd-fractal!", "black")
+
+    p = getParams()
+    # TODO: move size to settings
+    win = Window(800, 800, "Hello from bd-fractal!", p.backColor)
     length = (win.height // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
-    # I want to limit this to 15-90 in 15 degree increments
-    spokeAngle = 30
-    endPoints: list[Point] = _getEndPoints(start, spokeAngle, length)
+    endPoints: list[Point] = _getEndPoints(start, p.spokeAngle, length)
 
     for end in endPoints:
         win.redraw()
 
         line = Line(start, end)
-        color = _randomColor()
-        color = "white"
-        _drawDynamicBranches(win, line, 0, color)
 
-        # TODO: make this an option in UI
-        time.sleep(0.1)
+        _drawBranches(p, win, line, 0)
+
+        if p.doSleep:
+            time.sleep(0.1)
 
     win.wait()
 
 
-# TODO: I want to make these variables a params struct passed in by UI
-def _drawDynamicBranches(
-    win: Window, origin: Line, recursionLevel: int, color: str = "white"
-):
-    # color = "blueviolet"
-    # color = _randomColor()
-    # color = branchColor[level % len(branchColor)]
+def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
 
-    recursionLimit = 10
-    if recursionLevel > recursionLimit:
+    # TODO: some color stuff I was playing with
+    color = "blueviolet"
+    color = _randomColor()
+    color = _branchColor[recursionLevel % len(_branchColor)]
+    _ = color
+
+    if p.doRecursionLimit and recursionLevel > p.recursionLimit:
         return
     recursionLevel += 1
 
-    win.drawLine(origin, color)
+    win.drawLine(origin, p.lineColor)
 
-    # planning to limit this to 0-90 in 5 degree increments
-    branchAngle = 30
-
-    # number of branches per line
-    branchCount = 6
-    # density - space between branches
     originLength = round(origin.length)
-    branchInterval = originLength // branchCount
-    # limit branch density, have to have space between branches, or it looks like shit
-    minBranchSpace = 3
-    # override for fixed version that I like less
-    # branchInterval = 20
-
-    # invert the direction of branches
-    doInvert = False
-    # start at origin vs first interval
-    doStartCenter = False
+    if p.doFixedBranchInterval:
+        branchInterval = p.branchInterval
+    else:
+        branchInterval = originLength // p.branchCount
+        if branchInterval < p.minBranchInterval:
+            return
 
     # where to start branching
+    # TODO: would like to expose this
     intervalMultiplier = 1
-    if doStartCenter:
+    if p.doStartCenter:
         intervalMultiplier = 0
-
-    if branchInterval < minBranchSpace:
-        return
 
     lineLength = originLength
     while lineLength >= branchInterval:
@@ -91,9 +81,9 @@ def _drawDynamicBranches(
 
         branchStartPoint = trig.getEndPoint(origin.start, origin.angle, lineConsumed)
 
-        x = branchAngle
-        if doInvert:
-            x = 180 - branchAngle
+        x = p.branchAngle
+        if p.doInvert:
+            x = 180 - p.branchAngle
 
         rightLine = Line(
             branchStartPoint,
@@ -104,8 +94,8 @@ def _drawDynamicBranches(
             trig.getEndPoint(branchStartPoint, origin.angle + x, branchlen),
         )
 
-        _drawDynamicBranches(win, rightLine, recursionLevel, color)
-        _drawDynamicBranches(win, leftLine, recursionLevel, color)
+        _drawBranches(p, win, rightLine, recursionLevel)
+        _drawBranches(p, win, leftLine, recursionLevel)
 
 
 def _randomColor() -> str:

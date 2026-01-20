@@ -37,19 +37,23 @@ def hypotenuse(base: int, opp: int) -> float:
     h = base**2 + opp**2
     h = math.sqrt(h)
 
-    # I think rounding was making lines slightly off, changed to float
+    # I think rounding to int was making lines slightly off, changed to float
     # h = round(h)
+    h = round(h, 4)
+    # print(h)
 
     return h
 
 
 # I want to work with degrees not radians
-def lineAngleCircle(base: int, opp: int) -> int:
+def calcAngle360(base: int, opp: int) -> int:
     """
     translate angle to 360
     this is the only way I could get my head around it
     it makes the angle calculation for branches simple
     """
+
+    # TODO: do I care? why not just return 0?
     if base == 0 and opp == 0:
         raise AssertionError("no angle possible")
 
@@ -89,6 +93,10 @@ def lineAngleCircle(base: int, opp: int) -> int:
 
 
 def theta(base: int, opp: int) -> int:
+    """
+    calculate angle of hypotenuse and base
+    """
+
     if base == 0:
         raise AssertionError("stop passing bad stuff")
 

@@ -19,7 +19,7 @@ class Line:
         self.end = end
         self.width = width
         self.length = trig.hypotenuse(end.x - start.x, end.y - start.y)
-        self.angle = trig.lineAngleCircle(end.x - start.x, end.y - start.y)
+        self.angle = trig.calcAngle360(end.x - start.x, end.y - start.y)
 
     def __str__(self) -> str:
         return f"start:{self.start} end:{self.end} length:{round(self.length, 2)} angle:{self.angle}"
