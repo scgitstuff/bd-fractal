@@ -3,8 +3,6 @@ import math
 import numpy
 
 
-# TODO: I'm not sure the rounding is correct
-# I see some defects when zooming in on screen shot
 def getEndPoint(start: Point, angle: int, length: int) -> Point:
     """
     initially used to find the point at given length along an existing line
@@ -14,33 +12,32 @@ def getEndPoint(start: Point, angle: int, length: int) -> Point:
         the Line constructor will calculate the real value
     """
 
-    # special case needed for branches
+    # special case needed for branches as they shrink
     if length <= 0:
         return start
 
     angle = angle % 360
 
+    # TODO: not a todo, just a note about a bug
+    # had to round precision, I arbitrarily picked 8
+    # float problems, 0.5 -> 0.444444444444444449
+    # it was fucking up y coordinate and making the left branch off
+
     # x calculation
-    x = length * math.cos(math.radians(angle))
+    x = length * round(math.cos(math.radians(angle)), 8)
     # offset from wherever the line started
     x = round(x) + start.x
 
-    y = length * math.sin(math.radians(angle))
+    y = length * round(math.sin(math.radians(angle)), 8)
     y = round(y) + start.y
 
-    end = Point(x, y)
-
-    return end
+    return Point(x, y)
 
 
 def hypotenuse(base: int, opp: int) -> float:
     h = base**2 + opp**2
     h = math.sqrt(h)
-
-    # I think rounding to int was making lines slightly off, changed to float
-    # h = round(h)
     h = round(h, 4)
-    # print(h)
 
     return h
 

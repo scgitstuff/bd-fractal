@@ -1,3 +1,4 @@
+import math
 from window import Window
 from point import Point
 from line import Line
@@ -21,7 +22,7 @@ def doStuff():
 
     p = getParams()
     # TODO: move size to settings
-    win = Window(800, 800, "Hello from bd-fractal!", p.backColor)
+    win = Window(500, 500, "bd-fractal first algorithm", p.backColor)
     length = (win.height // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
     endPoints: list[Point] = _getEndPoints(start, p.spokeAngle, length)
@@ -30,7 +31,6 @@ def doStuff():
         win.redraw()
 
         line = Line(start, end)
-
         _drawBranches(p, win, line, 0)
 
         if p.doSleep:
@@ -53,7 +53,7 @@ def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
 
     win.drawLine(origin, p.lineColor)
 
-    originLength = round(origin.length)
+    originLength = math.ceil(origin.length)
     if p.doFixedBranchInterval:
         branchInterval = p.branchInterval
     else:
@@ -89,10 +89,15 @@ def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
             branchStartPoint,
             trig.getEndPoint(branchStartPoint, origin.angle - x, branchlen),
         )
+        # print(f"rightLine: {rightLine}")
         leftLine = Line(
             branchStartPoint,
             trig.getEndPoint(branchStartPoint, origin.angle + x, branchlen),
         )
+        # print(f"leftLine:  {leftLine}")
+
+        # if rightLine.length != leftLine.length:
+        #     print(f"{origin.angle} : {rightLine.length} vs {leftLine.length}")
 
         _drawBranches(p, win, rightLine, recursionLevel)
         _drawBranches(p, win, leftLine, recursionLevel)

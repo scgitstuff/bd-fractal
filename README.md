@@ -33,9 +33,9 @@ boot.dev "First Personal Project"
 - `tkinter`  
   it did not come installed for me; Linux Mint 22.1  
   https://tkdocs.com/tutorial/install.html
-- `numpy`
+- `numpy` comes with python
 
-# Run/Use
+# Run
 
 ```shell
 uv run src/main.py
