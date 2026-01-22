@@ -3,18 +3,17 @@ from dataclasses import dataclass
 # from collections import namedtuple
 
 """
-this file will be the parameters used to tweak the behavior of first.py
-
-start with the defaults that I like
-then add code to save/load from a file to remember user changes
+the parameters used to tweak the behavior of first.py
 """
 
-# TODO: look into
-# @dataclass(frozen=True)
 
-
+# TODO: each field comment needs to be put into _validate()
 @dataclass(kw_only=True)
+# @dataclass(frozen=True)
 class Params:
+
+    # hard min, resolution dependent max
+    imageSize = 800
 
     # limit this to 15-90 in 15 degree increments
     spokeAngle = 30
@@ -38,7 +37,7 @@ class Params:
 
     # Limit recursion depth
     doRecursionLimit = False
-    recursionLimit = 3
+    recursionLimit = 2
 
     lineColor = "white"
     # lineColor = "blueviolet"
@@ -52,7 +51,6 @@ def getParams() -> Params:
     return p
 
 
-# TODO: add all the range checks for each param
 def _validate(p: Params):
     if p.backColor == p.lineColor:
         raise AssertionError("line and background colors cannot be the same")
@@ -69,23 +67,3 @@ def _load() -> Params:
 # TODO: call from UI when it has buttons to do stuff
 def setParams(p: Params):
     pass
-
-
-# TODO: the crap below is some stuff I want to look into, not real code
-
-
-# @dataclass
-# class Point:
-#     x: float
-#     y: float
-#     z: float = 0.0
-
-
-# p = Point(1.5, 2.5)
-# print(p)  # Point(x=1.5, y=2.5, z=0.0)
-
-
-# # this is garbage
-# MyStruct = namedtuple("MyStruct", ["field1", "field2", "field3"])  # type: ignore
-# m = MyStruct("foo", "bar", "baz")
-# m = MyStruct(field1="foo", field2="bar", field3="baz")

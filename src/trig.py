@@ -5,8 +5,6 @@ import numpy
 
 def getEndPoint(start: Point, angle: int, length: int) -> Point:
     """
-    initially used to find the point at given length along an existing line
-
     :param length:
         this is more of a requested length
         the Line constructor will calculate the real value
@@ -18,10 +16,10 @@ def getEndPoint(start: Point, angle: int, length: int) -> Point:
 
     angle = angle % 360
 
-    # TODO: not a todo, just a note about a bug
-    # had to round precision, I arbitrarily picked 8
     # float problems, 0.5 -> 0.444444444444444449
-    # it was fucking up y coordinate and making the left branch off
+    # had to round precision, I arbitrarily picked 8
+    # sometimes the y coordinate was off
+    # manifest as the left branch being shorter than right
 
     # x calculation
     x = length * round(math.cos(math.radians(angle)), 8)
@@ -45,12 +43,10 @@ def hypotenuse(base: int, opp: int) -> float:
 # I want to work with degrees not radians
 def calcAngle360(base: int, opp: int) -> int:
     """
-    translate angle to 360
-    this is the only way I could get my head around it
-    it makes the angle calculation for branches simple
+    calculate angle of hypotenuse
+    translate it to 360
     """
 
-    # TODO: do I care? why not just return 0?
     if base == 0 and opp == 0:
         raise AssertionError("no angle possible")
 

@@ -18,12 +18,9 @@ _branchColor = [
 # TODO: the UI should have all the settings as radio/check and spin
 # with buttons to launch a separate window for the image and save
 def doStuff():
-    # print("Hello from bd-fractal!")
-
     p = getParams()
-    # TODO: move size to settings
-    win = Window(500, 500, "bd-fractal first algorithm", p.backColor)
-    length = (win.height // 2) - 25  # end branches were being clipped
+    win = Window(p.imageSize, p.imageSize, "bd-fractal first algorithm", p.backColor)
+    length = (p.imageSize // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
     endPoints: list[Point] = _getEndPoints(start, p.spokeAngle, length)
 
@@ -41,7 +38,7 @@ def doStuff():
 
 def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
 
-    # TODO: some color stuff I was playing with
+    # TODO: some color stuff I started playing with
     color = "blueviolet"
     color = _randomColor()
     color = _branchColor[recursionLevel % len(_branchColor)]
@@ -108,8 +105,6 @@ def _randomColor() -> str:
     green = "%02x" % random.randint(0, 255)
     blue = "%02x" % random.randint(0, 255)
     color = f"#{red}{green}{blue}"
-    # color = "white"
-    # print(color)
 
     return color
 

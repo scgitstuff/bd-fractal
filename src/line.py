@@ -1,22 +1,16 @@
 from point import Point
 import trig
 
-"""
-I'm using Line as if it were immutable
-any time I need to re-size a line
-just make a new one with getEndPoint()
-
-"""
-
 
 class Line:
     def __init__(self, start: Point, end: Point, width: int = 1):
-        # TODO: fix this, it should be allowed
         if start.x == end.x and start.y == end.y:
             raise AssertionError("a Line cannot be a single Point")
 
         self.start = start
         self.end = end
+        # TODO: line width is a UI thing, probably should not be here
+        # so far only used it for an override in a test
         self.width = width
         self.length = trig.hypotenuse(end.x - start.x, end.y - start.y)
         self.angle = trig.calcAngle360(end.x - start.x, end.y - start.y)
