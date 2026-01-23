@@ -5,7 +5,6 @@ import trig
 
 
 def main():
-    print("Testing")
     testPoint()
     testLine()
     testWindow()
@@ -13,13 +12,13 @@ def main():
 
 def testPoint():
     p = Point(45, 60)
-    print()
+    print("\ntestPoint")
     print(p)
     print(p.asTuple())
 
 
 def testLine():
-
+    print("\ntestLine")
     print(trig.calcAngle360(10, 0))
     print(trig.calcAngle360(10, 10))
     print(trig.calcAngle360(0, 10))
@@ -45,6 +44,7 @@ def testWindow():
     win = Window(500, 500, "testWindow")
     start = Point(0, 0)
 
+    print("\ntestWindow")
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
         line = Line(start, trig.getEndPoint(start, angle, 200))
         win.drawLine(line, "black")

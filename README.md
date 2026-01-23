@@ -50,6 +50,5 @@ uv run src/main.py
 
 - it does what I wanted, it is a wheel of repeating patterns
 - each spoke of the wheel is recursively processed, adding branches decreasing in sized at an interval
-- I changed the background black and lines white, it is becoming a snowflake generator
 
 ![default](./bd-fractal.png)

@@ -15,10 +15,13 @@ _branchColor = [
 ]
 
 
-# TODO: the UI should have all the settings as radio/check and spin
-# with buttons to launch a separate window for the image and save
+# TODO: the UI should have all the settings as radio/check, spinbox, input
+# with buttons to render the image and save it
+# not sure if it will render in a separate window or not
 def doStuff():
+    # TODO: catch validation errors and display in UI
     p = getParams()
+
     win = Window(p.imageSize, p.imageSize, "bd-fractal first algorithm", p.backColor)
     length = (p.imageSize // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
@@ -109,16 +112,20 @@ def _randomColor() -> str:
     return color
 
 
-def _getEndPoints(start: Point, angle: int, length: int) -> list[Point]:
+def _getEndPoints(start: Point, spokeAngle: int, length: int) -> list[Point]:
     endPoints: list[Point] = []
 
-    isValidAngle = 360 % angle == 0
-    if not isValidAngle:
-        raise AssertionError("angle must be a factor of 360")
+    # if you only want 1 spoke, avoid divide by 0
+    if spokeAngle == 0:
+        spokeAngle = 360
 
-    count = 360 // angle
+    isValidAngle = 360 % spokeAngle == 0
+    if not isValidAngle:
+        raise AssertionError("spoke angle must be a factor of 360")
+
+    count = 360 // spokeAngle
 
     for i in range(count):
-        endPoints.append(trig.getEndPoint(start, i * angle, length))
+        endPoints.append(trig.getEndPoint(start, i * spokeAngle, length))
 
     return endPoints
