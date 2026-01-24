@@ -1,47 +1,37 @@
-# from tkinter import Tk, BOTH, Canvas, ttk
-from tkinter import Tk, Canvas
+from tkinter import *  # type: ignore
+from tkinter import ttk  # type: ignore
 from line import Line
 from point import Point
 
 
 class Window:
     def __init__(
-        self, width: int, height: int, title: str = "Fractal", background: str = "white"
+        self,
+        root: Tk,
+        width: int,
+        height: int,
+        title: str = "Fractal",
+        background: str = "white",
     ):
-        self.width = width
-        self.height = height
+        self.root = root
 
-        self.center = Point(width // 2, height // 2)
+        self._center = Point(width // 2, height // 2)
 
-        self.root = Tk()
-        self.root.title(title)
-        self.root.protocol("WM_DELETE_WINDOW", self.close)
-        # self.root.resizable(True, True)
+        root.columnconfigure(0, weight=1)
+        root.rowconfigure(0, weight=1)
+        root.title(title)
 
         self.canvas = Canvas(
-            self.root,
-            width=self.width,
-            height=self.height,
+            root,
+            width=width,
+            height=height,
             background=background,
         )
-        # TODO: bad old way
-        # working on newer, correct, tkinter code
-        # will rewrite when I'm done tutorial
-        self.canvas.pack()
-
-        self.isRunning = False
+        self.canvas.grid(column=0, row=0)
 
     def redraw(self):
         self.root.update_idletasks()
         self.root.update()
-
-    def wait(self):
-        self.isRunning = True
-        while self.isRunning:
-            self.redraw()
-
-    def close(self):
-        self.isRunning = False
 
     def drawLine(self, line: Line, fillColor: str = "black"):
         self.canvas.create_line(
@@ -52,4 +42,4 @@ class Window:
         )
 
     def _offset(self, p: Point) -> Point:
-        return Point(self.center.x + p.x, self.center.y - p.y)
+        return Point(self._center.x + p.x, self._center.y - p.y)

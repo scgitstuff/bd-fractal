@@ -1,4 +1,5 @@
-import math
+from tkinter import *  # type: ignore
+from tkinter import ttk  # type: ignore
 from window import Window
 from point import Point
 from line import Line
@@ -6,6 +7,8 @@ from settings import Params, getParams
 import trig
 import time
 import random
+import math
+
 
 _branchColor = [
     "white",
@@ -22,7 +25,15 @@ def doStuff():
     # TODO: catch validation errors and display in UI
     p = getParams()
 
-    win = Window(p.imageSize, p.imageSize, "bd-fractal first algorithm", p.backColor)
+    root = Tk()
+
+    win = Window(
+        root,
+        p.imageSize,
+        p.imageSize,
+        "bd-fractal first algorithm",
+        p.backColor,
+    )
     length = (p.imageSize // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
     endPoints: list[Point] = _getEndPoints(start, p.spokeAngle, length)
@@ -36,7 +47,9 @@ def doStuff():
         if p.doSleep:
             time.sleep(0.1)
 
-    win.wait()
+    # win.wait()
+
+    root.mainloop()
 
 
 def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):

@@ -1,3 +1,5 @@
+from tkinter import *  # type: ignore
+from tkinter import ttk  # type: ignore
 from window import Window
 from line import Line
 from point import Point
@@ -41,7 +43,8 @@ def testLine():
 
 
 def testWindow():
-    win = Window(500, 500, "testWindow")
+    root = Tk()
+    win = Window(root, 500, 500, "testWindow")
     start = Point(0, 0)
 
     print("\ntestWindow")
@@ -59,7 +62,7 @@ def testWindow():
     line = Line(Point(-50, -50), Point(-100, -100), 3)
     win.drawLine(line, "red")
 
-    win.wait()
+    root.mainloop()
 
 
 if __name__ == "__main__":
