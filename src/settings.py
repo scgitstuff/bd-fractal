@@ -1,6 +1,4 @@
-from dataclasses import dataclass
-
-# from collections import namedtuple
+from tkinter import IntVar, StringVar
 
 """
 the parameters used to tweak the behavior of first.py
@@ -8,44 +6,52 @@ the parameters used to tweak the behavior of first.py
 
 
 # TODO: each field comment needs to be put into _validate()
-@dataclass(kw_only=True)
+# TODO: using dataclass caused errors in tkinter creating IntVar
+# had to switch to normal class, constructor
+# TODO: finish converting fields, did a few POC first pass
+# TODO: I hate the coupling
+# setting up the UI left me with 2 choices
+# either use the tkinter data classes that bind to UI elements
+# or duplicate the structure and write a bridge to copy all the values
+# out of UI into primitives; both suck
 class Params:
-    # hard min, resolution dependent max
-    imageSize = 800
+    def __init__(self):
+        # hard min, resolution dependent max
+        self.imageSize = IntVar(value=800)
 
-    lineColor = "white"
-    # lineColor = "red"
-    # lineColor = "blueviolet"
-    backColor = "black"
+        # lineColor = "red"
+        # lineColor = "blueviolet"
+        self.lineColor = StringVar(value="white")
+        self.backColor = StringVar(value="black")
 
-    # pause between spokes
-    doSleep = True
+        # pause between spokes
+        self.doSleep = True
 
-    # limit this to 15-90 in 15 degree increments
-    # also valid edge cases 0, 180, 120 for 1, 2, or 3 spokes
-    spokeAngle = 30
+        # limit this to 15-90 in 15 degree increments
+        # also valid edge cases 0, 180, 120 for 1, 2, or 3 spokes
+        self.spokeAngle = 30
 
-    # Branch settings *******************************
+        # Branch settings *******************************
 
-    # limit this to 0-90 in 5 degree increments
-    branchAngle = 30
+        # limit this to 0-90 in 5 degree increments
+        self.branchAngle = 30
 
-    # Limit recursion depth
-    doRecursionLimit = False
-    recursionLimit = 2
+        # Limit recursion depth
+        self.doRecursionLimit = False
+        self.recursionLimit = 2
 
-    # dynamic branches, default behavior
-    branchCount = 6
-    minBranchInterval = 3
-    # static branches, boring
-    doFixedBranchInterval = False
-    branchInterval = 20
+        # dynamic branches, default behavior
+        self.branchCount = 6
+        self.minBranchInterval = 3
+        # static branches, boring
+        self.doFixedBranchInterval = False
+        self.branchInterval = 20
 
-    # invert the direction of branches
-    doInvert = False
+        # invert the direction of branches
+        self.doInvert = False
 
-    # start at origin vs first interval
-    doStartCenter = False
+        # start at origin vs first interval
+        self.doStartCenter = False
 
 
 def getParams() -> Params:
@@ -57,7 +63,7 @@ def getParams() -> Params:
 
 
 def _validate(p: Params):
-    if p.backColor == p.lineColor:
+    if p.backColor.get() == p.lineColor.get():
         raise AssertionError("line and background colors cannot be the same")
 
 

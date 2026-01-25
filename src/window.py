@@ -2,30 +2,28 @@ from tkinter import *  # type: ignore
 from tkinter import ttk  # type: ignore
 from line import Line
 from point import Point
+from settings import getParams
 
 
 class Window:
-    def __init__(
-        self,
-        root: Tk,
-        width: int,
-        height: int,
-        title: str = "Fractal",
-        background: str = "white",
-    ):
+    def __init__(self, root: Tk, title: str):
+        # TODO: catch validation errors and display in UI
+        self.params = getParams()
         self.root = root
 
-        self._center = Point(width // 2, height // 2)
-
-        root.columnconfigure(0, weight=1)
-        root.rowconfigure(0, weight=1)
         root.title(title)
+        # root.columnconfigure(0, weight=1)
+        # root.rowconfigure(0, weight=1)
+
+        self._center = Point(
+            self.params.imageSize.get() // 2, self.params.imageSize.get() // 2
+        )
 
         self.canvas = Canvas(
             root,
-            width=width,
-            height=height,
-            background=background,
+            width=self.params.imageSize.get(),
+            height=self.params.imageSize.get(),
+            background=self.params.backColor.get(),
         )
         self.canvas.grid(column=0, row=0)
 

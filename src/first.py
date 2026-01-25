@@ -3,7 +3,6 @@ from tkinter import ttk  # type: ignore
 from window import Window
 from point import Point
 from line import Line
-from settings import Params, getParams
 import trig
 import time
 import random
@@ -22,29 +21,21 @@ _branchColor = [
 # with buttons to render the image and save it
 # not sure if it will render in a separate window or not
 def doStuff():
-    # TODO: catch validation errors and display in UI
-    p = getParams()
 
     root = Tk()
 
-    win = Window(
-        root,
-        p.imageSize,
-        p.imageSize,
-        "bd-fractal first algorithm",
-        p.backColor,
-    )
-    length = (p.imageSize // 2) - 25  # end branches were being clipped
+    win = Window(root, "bd-fractal first algorithm")
+    length = (win.params.imageSize.get() // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
-    endPoints: list[Point] = _getEndPoints(start, p.spokeAngle, length)
+    endPoints: list[Point] = _getEndPoints(start, win.params.spokeAngle, length)
 
     for end in endPoints:
         win.redraw()
 
         line = Line(start, end)
-        _drawBranches(p, win, line, 0)
+        _drawBranches(win, line, 0)
 
-        if p.doSleep:
+        if win.params.doSleep:
             time.sleep(0.1)
 
     # win.wait()
@@ -52,7 +43,9 @@ def doStuff():
     root.mainloop()
 
 
-def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
+def _drawBranches(win: Window, origin: Line, recursionLevel: int):
+    # TODO: I used to pass this in, didn't feel like refactoring usage yet
+    p = win.params
 
     # TODO: some color stuff I started playing with
     color = "blueviolet"
@@ -64,7 +57,7 @@ def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
         return
     recursionLevel += 1
 
-    win.drawLine(origin, p.lineColor)
+    win.drawLine(origin, p.lineColor.get())
 
     originLength = math.ceil(origin.length)
     if p.doFixedBranchInterval:
@@ -112,8 +105,8 @@ def _drawBranches(p: Params, win: Window, origin: Line, recursionLevel: int):
         # if rightLine.length != leftLine.length:
         #     print(f"{origin.angle} : {rightLine.length} vs {leftLine.length}")
 
-        _drawBranches(p, win, rightLine, recursionLevel)
-        _drawBranches(p, win, leftLine, recursionLevel)
+        _drawBranches(win, rightLine, recursionLevel)
+        _drawBranches(win, leftLine, recursionLevel)
 
 
 def _randomColor() -> str:
