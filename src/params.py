@@ -54,7 +54,9 @@ class Params:
         self.doStartCenter = False
 
 
-def getParams() -> Params:
+# TODO: this should be a factory, a classmethod
+# but linter is giving me shit about return type
+def newParams() -> Params:
     p = _load()
 
     _validate(p)
@@ -67,7 +69,8 @@ def _validate(p: Params):
         raise AssertionError("line and background colors cannot be the same")
 
 
-# TODO: load from file
+# TODO: load from file if it exists
+# otherwise new instance with defaults
 def _load() -> Params:
     p = Params()
 
@@ -76,5 +79,5 @@ def _load() -> Params:
 
 # TODO: save to file
 # TODO: call from UI when it has buttons to do stuff
-def setParams(p: Params):
+def saveParams(p: Params):
     pass

@@ -44,13 +44,14 @@ def testLine():
 
 def testWindow():
     root = Tk()
-    win = Window(root, 500, 500, "testWindow")
+    win = Window(root, "testWindow")
+    win.p.imageSize.set(500)
     start = Point(0, 0)
 
     print("\ntestWindow")
     for angle in [0, 45, 90, 135, 180, 225, 270, 315]:
         line = Line(start, trig.getEndPoint(start, angle, 200))
-        win.drawLine(line, "black")
+        win.drawLine(line)
 
     line = Line(Point(50, 50), Point(100, 100), 3)
     win.drawLine(line, "blue")

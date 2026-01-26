@@ -25,9 +25,9 @@ def doStuff():
     root = Tk()
 
     win = Window(root, "bd-fractal first algorithm")
-    length = (win.params.imageSize.get() // 2) - 25  # end branches were being clipped
+    length = (win.p.imageSize.get() // 2) - 25  # end branches were being clipped
     start = Point(0, 0)
-    endPoints: list[Point] = _getEndPoints(start, win.params.spokeAngle, length)
+    endPoints: list[Point] = _getEndPoints(start, win.p.spokeAngle, length)
 
     for end in endPoints:
         win.redraw()
@@ -35,7 +35,7 @@ def doStuff():
         line = Line(start, end)
         _drawBranches(win, line, 0)
 
-        if win.params.doSleep:
+        if win.p.doSleep:
             time.sleep(0.1)
 
     # win.wait()
@@ -45,7 +45,7 @@ def doStuff():
 
 def _drawBranches(win: Window, origin: Line, recursionLevel: int):
     # TODO: I used to pass this in, didn't feel like refactoring usage yet
-    p = win.params
+    p = win.p
 
     # TODO: some color stuff I started playing with
     color = "blueviolet"
