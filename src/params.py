@@ -36,7 +36,7 @@ class Params:
         self.backColor = StringVar(value="black")
 
         # pause between spokes
-        self.doSleep = BooleanVar(value=True)
+        self.doSleep = BooleanVar(value=False)
 
         # had to change to string because ttk.Combobox
         self.spokeAngle = StringVar(value="30")
