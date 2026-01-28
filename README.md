@@ -22,12 +22,14 @@ boot.dev "First Personal Project"
 
 # Dependencies
 
-- `uv`  
+- `uv` package and project manager  
   https://github.com/astral-sh/uv
-- `tkinter`  
+- `tkinter` UI library  
   it did not come installed for me; Linux Mint 22.1  
   https://tkdocs.com/tutorial/install.html
 - `numpy` comes with python
+- `pillow` for saving the image  
+  `uv add pillow`
 
 # Run
 

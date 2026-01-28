@@ -32,10 +32,10 @@ class First:
         )
 
         for end in endPoints:
-            self.win.redraw()
-
             line = Line(start, end)
             self._drawBranches(line, 0)
+
+            self.win.redraw()
 
             if self.win.p.doSleep.get():
                 time.sleep(0.1)

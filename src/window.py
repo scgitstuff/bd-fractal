@@ -1,10 +1,14 @@
+import time
 from tkinter import *  # type: ignore
-from tkinter import ttk  # type: ignore
-from tkinter import colorchooser  # type: ignore
+from tkinter import ttk
+from tkinter import colorchooser
+from tkinter.filedialog import asksaveasfilename
+from PIL import ImageGrab
+from typing import Callable
 from line import Line
 from point import Point
 from params import Params, newParams, validate
-from typing import Callable
+
 
 # TODO: tkinter code is a bloated mess of repetitive shit
 
@@ -27,18 +31,6 @@ class Window:
         self.rightFrame = ttk.Frame(self.mainFrame)
         self.rightFrame.grid(column=1, row=0, sticky=NSEW)
 
-    def setDoStuffCallBack(self, func: Callable[[], None] | None = None):
-        self.doStuffCallBack = func
-
-    def doStuff(self):
-        # TODO: catch validation errors and display in UI
-        validate(self.p)
-
-        self._configCanvas()
-
-        if self.doStuffCallBack is not None:
-            self.doStuffCallBack()
-
     def createWidgets(self):
         self._fillLeftFrame()
         self._fillRightFrame()
@@ -51,14 +43,21 @@ class Window:
     def _fillRightFrame(self):
         self._canvasSettings(self.rightFrame, parentRow=0)
         self._spokeSettings(self.rightFrame, parentRow=1)
-        self._branchSettings(self.rightFrame, parentRow=3)
+        self._branchSettings(self.rightFrame, parentRow=2)
 
+        ttk.Button(
+            self.rightFrame,
+            text="Save image",
+            command=self.saveImage,
+        ).grid(column=0, row=3, sticky=W)
+
+        # this will not stick to the bottom of the window
         ttk.Button(
             self.rightFrame,
             text="Do Stuff",
             command=self.doStuff,
             padding=(10, 10, 10, 10),
-        ).grid(column=0, row=4, columnspan=2)
+        ).grid(column=0, row=3, sticky=E)
 
         self._padKids(self.rightFrame)
 
@@ -253,3 +252,39 @@ class Window:
 
     def _offset(self, p: Point) -> Point:
         return Point(self._center.x + p.x, self._center.y - p.y)
+
+    def setDoStuffCallBack(self, func: Callable[[], None] | None = None):
+        self.doStuffCallBack = func
+
+    def doStuff(self):
+        # TODO: catch validation errors and display in UI
+        validate(self.p)
+
+        self._configCanvas()
+
+        if self.doStuffCallBack is not None:
+            self.doStuffCallBack()
+
+    # I kind of hate this
+    # Canvas does not give an easy way to save content
+    def saveImage(self):
+
+        self.root.withdraw()
+        files = [("Image", "*.png")]
+        file = asksaveasfilename(filetypes=files, defaultextension=".png")
+        self.root.deiconify()
+        self.redraw()
+
+        if file == "":
+            return
+
+        # it was capturing the save dialog in the screen shot
+        time.sleep(0.3)
+
+        x0 = self.canvas.winfo_rootx()
+        y0 = self.canvas.winfo_rooty()
+        x1 = x0 + self.canvas.winfo_width()
+        y1 = y0 + self.canvas.winfo_height()
+        ImageGrab.grab().crop(  # pyright: ignore[reportUnknownMemberType]
+            (x0, y0, x1, y1)
+        ).save(file)
