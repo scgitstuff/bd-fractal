@@ -44,8 +44,10 @@ def testLine():
 
 def testWindow():
     root = Tk()
-    win = Window(root, "testWindow")
+    root.title("testWindow")
+    win = Window(root)
     win.p.imageSize.set(500)
+    win.createWidgets()
     start = Point(0, 0)
 
     print("\ntestWindow")
