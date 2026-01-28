@@ -56,21 +56,20 @@ class First:
         self.win.drawLine(origin, p.lineColor.get())
 
         originLength = math.ceil(origin.length)
-        if p.doFixedBranchInterval.get():
-            branchInterval = p.branchInterval.get()
+        if p.doFixedBranchSpacing.get():
+            branchSpacing = p.fixedBranchSpacing.get()
         else:
-            branchInterval = originLength // p.branchCount.get()
-            if branchInterval < p.minBranchInterval.get():
-                return
+            branchSpacing = originLength // p.branchCount.get()
+            if branchSpacing < p.minBranchSpacing.get():
+                branchSpacing = p.minBranchSpacing.get()
 
         # where to start branching
-        # TODO: would like to expose this
         intervalMultiplier = 1
         if p.doStartCenter.get():
             intervalMultiplier = 0
 
         lineLength = originLength
-        while lineLength >= branchInterval:
+        while lineLength >= branchSpacing:
 
             # the branch has to shrink, otherwise infinite recursion
             # magic number 3 makes a size I like
@@ -79,7 +78,7 @@ class First:
             if branchlen < 2:
                 break
 
-            lineConsumed = branchInterval * intervalMultiplier
+            lineConsumed = branchSpacing * intervalMultiplier
             lineLength = originLength - lineConsumed
             intervalMultiplier += 1
 

@@ -14,7 +14,20 @@ the parameters used to tweak the behavior of first.py
 class Params:
 
     # this has to be limited to factors of 360, because calculations
-    SpokeAngles = ("0", "15", "30", "45", "60", "75", "90", "120", "180")
+    SpokeAngles = (
+        "5",
+        "10",
+        "15",
+        "20",
+        "30",
+        "45",
+        "60",
+        "72",
+        "90",
+        "120",
+        "180",
+        "0",
+    )
 
     def __init__(self):
         self.imageSize = IntVar(value=800)
@@ -44,11 +57,11 @@ class Params:
 
         # dynamic branches, default behavior
         self.branchCount = IntVar(value=6)
-        self.minBranchInterval = IntVar(value=3)
+        self.minBranchSpacing = IntVar(value=3)
 
         # static branches, boring
-        self.doFixedBranchInterval = BooleanVar(value=False)
-        self.branchInterval = IntVar(value=20)
+        self.doFixedBranchSpacing = BooleanVar(value=False)
+        self.fixedBranchSpacing = IntVar(value=20)
 
 
 # TODO: this should be a factory, a classmethod
@@ -86,19 +99,17 @@ def validate(p: Params):
         )
 
     if p.branchCount.get() < 1 or p.branchCount.get() > 100:
-        raise AssertionError(
-            f"branch interval {p.branchCount.get()} out of range 1 - 100"
-        )
+        raise AssertionError(f"branch count {p.branchCount.get()} out of range 1 - 100")
 
-    if p.minBranchInterval.get() < 2 or p.minBranchInterval.get() > 50:
+    if p.minBranchSpacing.get() < 2 or p.minBranchSpacing.get() > 50:
         raise AssertionError(
-            f"branch interval {p.minBranchInterval.get()} out of range 2 - 50"
+            f"min branch spacing {p.minBranchSpacing.get()} out of range 2 - 50"
         )
 
     # lower numbers cause too deep recursion, hang
-    if p.branchInterval.get() < 10 or p.branchInterval.get() > 1000:
+    if p.fixedBranchSpacing.get() < 10 or p.fixedBranchSpacing.get() > 1000:
         raise AssertionError(
-            f"branch interval {p.branchInterval.get()} out of range 10 - 1000"
+            f"fixed branch spacing {p.fixedBranchSpacing.get()} out of range 10 - 1000"
         )
 
 
@@ -116,8 +127,8 @@ def saveParams(p: Params):
     pass
 
 
-# TODO: could use this to make SpokeAngles better
-def makeList() -> List[int]:
+# could use this to make SpokeAngles
+def _makeList() -> List[int]:
     l: List[int] = [0]
 
     for i in range(1, 360):
@@ -125,3 +136,6 @@ def makeList() -> List[int]:
             print(i)
 
     return l
+
+
+_ = _makeList

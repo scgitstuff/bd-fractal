@@ -58,7 +58,7 @@ class Window:
             text="Do Stuff",
             command=self.doStuff,
             padding=(10, 10, 10, 10),
-        ).grid(column=0, row=10, columnspan=2)
+        ).grid(column=0, row=4, columnspan=2)
 
         self._padKids(self.rightFrame)
 
@@ -166,7 +166,7 @@ class Window:
             offvalue=False,
         ).grid(column=0, row=3, columnspan=2, sticky=W)
 
-        ttk.Label(parent, text="Dynamic branch interval:").grid(
+        ttk.Label(parent, text="Dynamic branch spacing:").grid(
             column=0, row=4, columnspan=2, sticky=W
         )
         ttk.Label(parent, text="Branch count").grid(column=0, row=5, sticky=E)
@@ -177,19 +177,19 @@ class Window:
             width=4,
             textvariable=self.p.branchCount,
         ).grid(column=1, row=5, sticky=W)
-        ttk.Label(parent, text="Min branch interval").grid(column=0, row=6, sticky=E)
+        ttk.Label(parent, text="Min branch spacing").grid(column=0, row=6, sticky=E)
         ttk.Spinbox(
             parent,
             from_=2,
             to=50,
             width=4,
-            textvariable=self.p.minBranchInterval,
+            textvariable=self.p.minBranchSpacing,
         ).grid(column=1, row=6, sticky=W)
 
         ttk.Checkbutton(
             parent,
-            text="Static branch interval",
-            variable=self.p.doFixedBranchInterval,
+            text="Fixed branch spacing",
+            variable=self.p.doFixedBranchSpacing,
             onvalue=True,
             offvalue=False,
         ).grid(column=0, row=7, sticky=W)
@@ -198,7 +198,7 @@ class Window:
             from_=10,
             to=1000,
             width=4,
-            textvariable=self.p.branchInterval,
+            textvariable=self.p.fixedBranchSpacing,
         ).grid(column=1, row=7, sticky=E)
 
         self._padKids(parent)
