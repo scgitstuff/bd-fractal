@@ -31,29 +31,33 @@ class First:
             start, int(self.win.p.spokeAngle.get()), length
         )
 
+        p = self.win.p
+        color = p.lineColor.get()
+
         for end in endPoints:
             line = Line(start, end)
-            self._drawBranches(line, 0)
+
+            if p.spokeRandomColor.get():
+                color = self._randomColor()
+
+            self._drawBranches(line, 0, color)
 
             self.win.redraw()
 
             if self.win.p.doSleep.get():
                 time.sleep(0.1)
 
-    def _drawBranches(self, origin: Line, recursionLevel: int):
+    def _drawBranches(self, origin: Line, recursionLevel: int, color: str):
         p = self.win.p
 
         # some color stuff I started playing with
-        color = "blueviolet"
-        color = self._randomColor()
-        color = _branchColor[recursionLevel % len(_branchColor)]
-        _ = color
+        # color = _branchColor[recursionLevel % len(_branchColor)]
 
         if p.doRecursionLimit.get() and recursionLevel > p.recursionLimit.get():
             return
         recursionLevel += 1
 
-        self.win.drawLine(origin, p.lineColor.get())
+        self.win.drawLine(origin, color)
 
         originLength = math.ceil(origin.length)
         if p.doFixedBranchSpacing.get():
@@ -99,8 +103,8 @@ class First:
                 trig.getEndPoint(branchStartPoint, origin.angle + x, branchlen),
             )
 
-            self._drawBranches(rightLine, recursionLevel)
-            self._drawBranches(leftLine, recursionLevel)
+            self._drawBranches(rightLine, recursionLevel, color)
+            self._drawBranches(leftLine, recursionLevel, color)
 
     def _randomColor(self) -> str:
         red = "%02x" % random.randint(0, 255)

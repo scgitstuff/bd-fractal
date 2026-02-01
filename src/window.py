@@ -7,7 +7,7 @@ from PIL import ImageGrab
 from typing import Callable
 from line import Line
 from point import Point
-from params import Params, newParams, validate
+from params import Params, newParams, validate, saveParams
 
 
 # TODO: tkinter code is a bloated mess of repetitive shit
@@ -16,6 +16,8 @@ from params import Params, newParams, validate
 class Window:
     def __init__(self, root: Tk):
         self.p = newParams()
+        # TODO: need accurate number for max window
+        self.p.maxHeight.set(root.winfo_screenheight() - 100)
         self.doStuffCallBack = None
         self.root = root
 
@@ -51,7 +53,6 @@ class Window:
             command=self.saveImage,
         ).grid(column=0, row=3, sticky=W)
 
-        # this will not stick to the bottom of the window
         ttk.Button(
             self.rightFrame,
             text="Do Stuff",
@@ -74,16 +75,16 @@ class Window:
             parent,
             text="Canvas size",
         ).grid(column=0, row=0, sticky=W)
-        # TODO: detect screen height for max
         ttk.Spinbox(
             parent,
             from_=100,
-            to=1000,
+            to=self.p.maxHeight.get(),
             width=6,
             textvariable=self.p.imageSize,
         ).grid(column=1, row=0, sticky=E)
 
         self._makeColorField(parent, self.p.backColor, "Background Color", row=1)
+
         self._makeColorField(parent, self.p.lineColor, "Line Color", row=2)
 
         self._padKids(parent)
@@ -113,6 +114,14 @@ class Window:
             values=Params.SpokeAngles,
             state="readonly",
         ).grid(column=1, row=1, sticky=E)
+
+        ttk.Checkbutton(
+            parent,
+            text="Random color spokes",
+            variable=self.p.spokeRandomColor,
+            onvalue=True,
+            offvalue=False,
+        ).grid(column=0, row=2, columnspan=2, sticky=W)
 
         self._padKids(parent)
 
@@ -204,7 +213,6 @@ class Window:
 
     def _configCanvas(self):
         imageSize = self.p.imageSize.get()
-
         self._center = Point(imageSize // 2, imageSize // 2)
 
         self.canvas.delete("all")
@@ -236,6 +244,9 @@ class Window:
         for child in parent.winfo_children():
             child.grid_configure(padx=x, pady=y)  # type: ignore
 
+    def _offset(self, p: Point) -> Point:
+        return Point(self._center.x + p.x, self._center.y - p.y)
+
     def redraw(self):
         self.root.update_idletasks()
         self.root.update()
@@ -250,15 +261,13 @@ class Window:
             width=line.width,
         )
 
-    def _offset(self, p: Point) -> Point:
-        return Point(self._center.x + p.x, self._center.y - p.y)
-
     def setDoStuffCallBack(self, func: Callable[[], None] | None = None):
         self.doStuffCallBack = func
 
     def doStuff(self):
         # TODO: catch validation errors and display in UI
         validate(self.p)
+        saveParams(self.p)
 
         self._configCanvas()
 

@@ -31,15 +31,20 @@ class Params:
 
     def __init__(self):
         self.imageSize = IntVar(value=800)
+        self.maxHeight = IntVar(value=-1)
 
         self.lineColor = StringVar(value="white")
         self.backColor = StringVar(value="black")
+
+        # Spoke settings *******************************
 
         # pause between spokes
         self.doSleep = BooleanVar(value=False)
 
         # had to change to string because ttk.Combobox
         self.spokeAngle = StringVar(value="30")
+
+        self.spokeRandomColor = BooleanVar(value=False)
 
         # Branch settings *******************************
 
@@ -69,17 +74,22 @@ class Params:
 def newParams() -> Params:
     p = _load()
 
+    if p is None:
+        p = Params()
+
     validate(p)
 
     return p
 
 
 def validate(p: Params):
-
-    # TODO: resolution dependent max
-    if p.imageSize.get() < 100 or p.imageSize.get() > 1000:
+    # height is set by Window, new Params object has no value
+    # so skip validation if it is not set
+    if p.maxHeight.get() != -1 and (
+        p.imageSize.get() < 100 or p.imageSize.get() > p.maxHeight.get()
+    ):
         raise AssertionError(
-            f"image size '{p.imageSize.get()}' out of range 100 - 1000"
+            f"image size '{p.imageSize.get()}' out of range 100 - {p.maxHeight.get()}"
         )
 
     if p.backColor.get() == p.lineColor.get():
@@ -114,17 +124,13 @@ def validate(p: Params):
 
 
 # TODO: load from file if it exists
-# otherwise new instance with defaults
-def _load() -> Params:
-    p = Params()
-
-    return p
+def _load() -> Params | None:
+    return None
 
 
 # TODO: save to file
-# TODO: call from UI when it has buttons to do stuff
-def saveParams(p: Params):
-    pass
+def saveParams(p: Params) -> None:
+    return None
 
 
 # could use this to make SpokeAngles
