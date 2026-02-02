@@ -1,8 +1,8 @@
-from first import doStuff
+from first import runFirstAlgorithm
 
 
 def main():
-    doStuff()
+    runFirstAlgorithm()
 
 
 if __name__ == "__main__":

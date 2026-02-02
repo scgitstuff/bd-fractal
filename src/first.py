@@ -133,14 +133,14 @@ class First:
         return endPoints
 
 
-def doStuff():
+def runFirstAlgorithm():
     root = Tk()
     root.title("bd-fractal first algorithm")
 
     win = Window(root)
     f = First(win)
-    win.setDoStuffCallBack(f.drawSpokes)
+    win.setDoStuffHook(f.drawSpokes)
     win.createWidgets()
-    win.doStuff()
+    win.doStuffEvent()  # make it load defaults
 
     root.mainloop()
